@@ -179,7 +179,7 @@ def use_key(key: str, interval: [int, float] = 0.1) -> None:
     sleep(1)
 
 
-def launch_game(game_name: str, game_folder: Path = None):
+def launch_game(game_name: str, game_folder: Path = None) -> subprocess.Popen:
     """
     Launches game
 
@@ -280,7 +280,7 @@ def process_statistics(stat_csv: Path, folder: Path) -> None:
     plt.savefig(folder / 'fps.png')
 
 
-def kill_process(process) -> None:
+def kill_process(process: subprocess.Popen) -> None:
     """
     Kills game process
 
@@ -292,14 +292,20 @@ def kill_process(process) -> None:
 
 
 def main() -> None:
+    # deserializing config
     hotkey, fraps_folder, benchmark_folder, game_name = get_config()
+
+    # getting args
     game_folder, output_folder = get_args()
+
+    # getting folder
     folder = get_folder(game_name=game_name, result_folder=output_folder)
 
+    # preparing logger
     setup_logging(folder)
 
+    # launching game
     process = launch_game(game_folder=game_folder, game_name=game_name)
-
 
     # press space to move to menu
     use_key('space')
